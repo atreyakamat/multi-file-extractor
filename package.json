@@ -1,0 +1,83 @@
+{
+  "name": "batchunpack",
+  "version": "1.0.0",
+  "description": "Drag-and-drop batch archive extractor for ZIP, TAR, 7z and more",
+  "main": "dist-electron/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && electron-builder",
+    "build:win": "npm run build:vite && electron-builder --win",
+    "build:mac": "npm run build:vite && electron-builder --mac",
+    "build:vite": "tsc && vite build",
+    "preview": "vite preview",
+    "electron:dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:build": "vite build && electron-builder"
+  },
+  "keywords": [
+    "archive",
+    "extractor",
+    "zip",
+    "tar",
+    "7z",
+    "batch",
+    "electron"
+  ],
+  "author": "Atreya",
+  "license": "MIT",
+  "dependencies": {
+    "adm-zip": "^0.5.10",
+    "electron-store": "^8.1.0",
+    "node-7z": "^3.0.0",
+    "tar": "^6.2.0"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.5",
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@types/tar": "^6.1.11",
+    "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
+    "electron": "^28.1.3",
+    "electron-builder": "^24.9.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.11",
+    "vite-plugin-electron": "^0.28.2",
+    "vite-plugin-electron-renderer": "^0.14.5",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.atreya.batchunpack",
+    "productName": "BatchUnpack",
+    "directories": {
+      "output": "release/${version}"
+    },
+    "files": [
+      "dist",
+      "dist-electron"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility"
+    }
+  }
+}
