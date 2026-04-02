@@ -5,6 +5,11 @@ interface DropZoneProps {
   disabled?: boolean
 }
 
+// Electron extends File with a path property
+interface ElectronFile extends File {
+  path: string
+}
+
 function DropZone({ onFilesAdded, disabled }: DropZoneProps) {
   const [isDragging, setIsDragging] = useState(false)
 
@@ -30,7 +35,7 @@ function DropZone({ onFilesAdded, disabled }: DropZoneProps) {
 
       if (disabled) return
 
-      const filePaths = Array.from(e.dataTransfer.files).map((file) => file.path)
+      const filePaths = Array.from(e.dataTransfer.files).map((file) => (file as ElectronFile).path)
       if (filePaths.length > 0) {
         onFilesAdded(filePaths)
       }
@@ -49,7 +54,7 @@ function DropZone({ onFilesAdded, disabled }: DropZoneProps) {
     input.onchange = (e) => {
       const target = e.target as HTMLInputElement
       if (target.files) {
-        const filePaths = Array.from(target.files).map((file) => file.path)
+        const filePaths = Array.from(target.files).map((file) => (file as ElectronFile).path)
         onFilesAdded(filePaths)
       }
     }
