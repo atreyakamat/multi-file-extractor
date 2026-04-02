@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { ArchiveFile, FileStatus, ExtractionSummary } from './types'
+import { generateFileId } from './utils'
 import DropZone from './components/DropZone'
 import OutputFolder from './components/OutputFolder'
 import FileQueue from './components/FileQueue'
@@ -49,7 +50,7 @@ function App() {
 
       if (fileInfo) {
         newFiles.push({
-          id: Math.random().toString(36).substring(7),
+          id: generateFileId(),
           path: fileInfo.path,
           name: fileInfo.name,
           size: fileInfo.size,

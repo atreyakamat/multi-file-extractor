@@ -1,4 +1,5 @@
 import { ArchiveFile } from '../types'
+import { formatFileSize } from '../utils'
 
 interface FileItemProps {
   file: ArchiveFile
@@ -7,14 +8,6 @@ interface FileItemProps {
 }
 
 function FileItem({ file, onRemove, isExtracting }: FileItemProps) {
-  const formatSize = (bytes: number): string => {
-    if (bytes === 0) return '0 B'
-    const k = 1024
-    const sizes = ['B', 'KB', 'MB', 'GB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i]
-  }
-
   const getStatusIcon = () => {
     switch (file.status) {
       case 'queued':
@@ -48,7 +41,7 @@ function FileItem({ file, onRemove, isExtracting }: FileItemProps) {
       <div className="file-icon">📦</div>
       <div className="file-info">
         <div className="file-name">{file.name}</div>
-        <div className="file-size">{formatSize(file.size)}</div>
+        <div className="file-size">{formatFileSize(file.size)}</div>
       </div>
 
       {(file.status === 'extracting' || file.status === 'done') && (
