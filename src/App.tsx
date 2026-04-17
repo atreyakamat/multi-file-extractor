@@ -22,15 +22,34 @@ function App() {
     })
 
     // Listen for extraction progress updates
+    const progressMap = new Map<string, number>()
+    let rafId: number
+
+    const updateUI = () => {
+      setFiles((prev) => {
+        let changed = false
+        const next = prev.map((file) => {
+          const progress = progressMap.get(file.path)
+          if (progress !== undefined && file.progress !== progress) {
+            changed = true
+            return { ...file, progress, status: 'extracting' as FileStatus }
+          }
+          return file
+        })
+        return changed ? next : prev
+      })
+      rafId = requestAnimationFrame(updateUI)
+    }
+
+    rafId = requestAnimationFrame(updateUI)
+
     window.electronAPI.onExtractionProgress((filePath, progress) => {
-      setFiles((prev) =>
-        prev.map((file) =>
-          file.path === filePath
-            ? { ...file, progress, status: 'extracting' as FileStatus }
-            : file
-        )
-      )
+      progressMap.set(filePath, progress)
     })
+
+    return () => {
+      cancelAnimationFrame(rafId)
+    }
   }, [])
 
   const handleFilesAdded = useCallback(async (filePaths: string[]) => {
@@ -83,8 +102,8 @@ function App() {
 
     const results: { success: boolean; file: ArchiveFile; error?: string }[] = []
 
-    // Process files with concurrency limit of 4
-    const concurrencyLimit = 4
+    // Process files with concurrency limit of 2
+    const concurrencyLimit = 2
     const executing: Promise<void>[] = []
 
     for (const file of files) {

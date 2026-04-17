@@ -12,34 +12,20 @@ export async function extractZip(
   return new Promise((resolve, reject) => {
     try {
       const zip = new AdmZip(archivePath)
-      const zipEntries = zip.getEntries()
-      const totalEntries = zipEntries.length
+      
+      // Use the async version to avoid blocking the main process
+      zip.extractAllToAsync(outputPath, true, false, (error) => {
+        if (error) {
+          reject(error)
+        } else {
+          if (onProgress) onProgress(100)
+          resolve()
+        }
+      })
 
-      if (totalEntries === 0) {
-        if (onProgress) onProgress(100)
-        resolve()
-        return
-      }
-
-      let extractedCount = 0
-
-      // Extract all at once (AdmZip doesn't support incremental extraction with progress easily)
-      zip.extractAllTo(outputPath, true)
-
-      // Simulate progress
+      // If onProgress is provided, we can at least signal that it started
       if (onProgress) {
-        const interval = setInterval(() => {
-          extractedCount++
-          const progress = Math.min((extractedCount / totalEntries) * 100, 100)
-          onProgress(progress)
-
-          if (extractedCount >= totalEntries) {
-            clearInterval(interval)
-            resolve()
-          }
-        }, 10)
-      } else {
-        resolve()
+        onProgress(10) // Start at 10%
       }
     } catch (error) {
       reject(error)
