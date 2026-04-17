@@ -1,5 +1,5 @@
 import AdmZip from 'adm-zip'
-import tar from 'tar'
+import * as tar from 'tar'
 import { spawn } from 'child_process'
 import path from 'path'
 import fs from 'fs/promises'

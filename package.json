@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Drag-and-drop batch archive extractor for ZIP, TAR, 7z and more",
   "main": "dist-electron/main.js",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && electron-builder",

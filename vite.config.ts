@@ -32,7 +32,14 @@ export default defineConfig({
           build: {
             outDir: 'dist-electron',
             sourcemap: true,
-            minify: false
+            minify: false,
+            rollupOptions: {
+              output: {
+                format: 'cjs',
+                entryFileNames: '[name].cjs'
+              },
+              external: ['electron']
+            }
           }
         }
       }

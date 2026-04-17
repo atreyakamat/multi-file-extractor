@@ -1,13 +1,9 @@
 import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron'
 import path from 'path'
 import Store from 'electron-store'
-import { fileURLToPath } from 'url'
 import { extractZip, extractTar, extract7z } from './extractors.js'
 import fs from 'fs/promises'
 import { statSync } from 'fs'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 const store = new Store()
 
@@ -20,7 +16,7 @@ function createWindow() {
     width: 900,
     height: 700,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'preload.cjs'),
       nodeIntegration: false,
       contextIsolation: true
     },
